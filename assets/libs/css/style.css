@@ -6972,13 +6972,6 @@ Media Query
 }
 
 
-footer {
-    position: absolute; bottom: 0;
-    color: white;
-    background-color: #0e0c28;
-    width: 100%;
-    text-align: center;
-}
 
 /* Custom, iPhone Retina */
 @media only screen and (max-width:320px) {}

@@ -1,3 +1,6 @@
+<?php
+include ('config.php');
+?>
 
 <table class="table table-hover">
     <thead>

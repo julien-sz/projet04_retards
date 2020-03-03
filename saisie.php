@@ -1,6 +1,5 @@
 <?php
-$db = new PDO('mysql:host=localhost;dbname=retards;charset=utf8','julien','Sprotsch0');
-//include 'config.php';
+include ('config.php');
 if (isset($_POST['submit'])) {
 
     $heure_arrivee = $_POST['heure_arrivee'];

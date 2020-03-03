@@ -17,12 +17,59 @@
 </style>
 
 <?php
+include ('config.php');
+if (isset($_POST['login'])) {
+    // et si les champs nom et password ne sont pas vides
+    if (isset($_POST['adresse_mail']) AND isset($_POST['password'])) {
+
+// recup des données du form
+        $adresse_mail = $_POST['adresse_mail'];
+        $password = $_POST['password'];
+
+// select données db
+        $response = $db->prepare('SELECT id, adresse_mail, password, nom
+              FROM utilisateurs
+              WHERE adresse_mail = :adresse_mail
+            ');
+        $response->bindValue(':adresse_mail', $adresse_mail, PDO::PARAM_STR);
+        $response->execute();
+        $member = $response->Fetch();
+        $response->CloseCursor();
+
+        // si l'ulisateur existe dans la db
+        if (!$member) {
+            header('location:connexion.php');
+            exit();
+        }
+
+        //comparaison mdp avec celui de la db
+        if ($password != $member['password']) {
+            header('location:connexion.php');
+            exit();
+        }
 
 
+        // si tout est OK
+        $_SESSION['id'] = $member['id'];
+        $_SESSION['nom'] = $member['nom'];
 
+        // => redirection vers candidats php
+        header('location:consultation.php');
+    }
+}
 
 ?>
 
+
+<?php
+if($session_id != 0) {
+
+    header('location:consultation.php');
+
+}
+
+else {
+    echo '
 
 <!-- ============================================================== -->
 <!-- login page  -->
@@ -33,26 +80,31 @@
         <div class="card-body">
             <form>
                 <div class="form-group">
-                    <input class="form-control form-control-lg" id="adresse_mail" type="text" placeholder="e-mail" autocomplete="off">
+                    <input class="form-control form-control-lg" name="adresse_mail" id="adresse_mail" type="text" placeholder="e-mail" autocomplete="off">
                 </div>
                 <div class="form-group">
-                    <input class="form-control form-control-lg" id="password" type="password" placeholder="Mot de Passe">
+                    <input class="form-control form-control-lg" name="password" id="password" type="password" placeholder="Mot de Passe">
                 </div>
-                <div class="form-group">
+                <!--<div class="form-group">
                     <label class="custom-control custom-checkbox">
                         <input class="custom-control-input" type="checkbox"><span class="custom-control-label">Enregistrer la Connexion</span>
                     </label>
-                </div>
-                <button type="submit" class="btn btn-primary btn-lg btn-block">Connexion</button>
+                </div>-->
+                <button type="submit" name="login" class="btn btn-primary btn-lg btn-block">Connexion</button>
             </form>
         </div>
     </div>
+    
+</div>
 
     <!-- ============================================================== -->
     <!-- end login page  -->
     <!-- ============================================================== -->
 
+';
+}
 
+?>
 
 
 
